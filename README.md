@@ -1,5 +1,5 @@
 # SteamUL
-An application using a CLI to grab and download games from steamunlocked.net
+An application using a CLI to grab and download games from steamunlocked (dot) net
 
 ## Disclaimer
 SteamUL accesses readily available information on the internet, and provides it to the user in a way no different than one would see off a Google search. The content provided by SteamUL is not hosted by the creator of SteamUL. I am not responsible for the content the user chooses to look-up, nor any legal troubles/computer issues that may arise.
