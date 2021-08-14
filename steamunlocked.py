@@ -1,11 +1,14 @@
+import os
 import time
 
 import pyshorteners.shorteners.chilpit
 import requests
 from bs4 import BeautifulSoup
-from progress.bar import Bar
 from seleniumwire import webdriver
+from tqdm import trange
 from webdriver_manager.chrome import ChromeDriverManager
+
+os.environ['WDM_LOG_LEVEL'] = '0'
 
 
 class SteamUL:
@@ -86,12 +89,9 @@ class SteamUL:
         print(" ".join(soup.find('a', class_='btn-download').text.split()))
         driver.get(soup.find('a', class_='btn-download').get('href'))
 
-        with Bar(message='Delay...', fill='@',
-                 suffix='%(percent).1f%% - %(eta)ds', max=20, check_tty=False,
-                 hide_cursor=False) as bar:
-            for _ in range(20):
-                time.sleep(1)
-                bar.next()
+        waiting_bar = trange(20, desc='Waiting', unit='s')
+        for _ in waiting_bar:
+            time.sleep(1)
 
         # Click button
         element = driver.find_element_by_xpath('//*[@id="submitFree"]')

@@ -1,4 +1,9 @@
 import os
+import zipfile
+from typing import Any
+
+from progress.spinner import Spinner
+from tqdm import tqdm
 
 from save_file import save_file
 from steamunlocked import SteamUL
@@ -15,7 +20,7 @@ def menu() -> None:
             \____/  \__| \___| \__,_||_| |_| |_| \___/ \_____/            
             """
     print(title)
-    print("SteamUL v1.0 by Buu (Discord: Kid I3uu#9827)")
+    print("SteamUL v1.1 by Buu (Discord: Kid I3uu#9827)")
     print("Python CLI to grab DDL for games off steamunlocked.net")
     print()
 
@@ -64,23 +69,64 @@ def immediate_dl(query: SteamUL, choice: int, ddl: str) -> None:
     # If they choose to download immediately
     if str(dl_now) == '1':
         # Check for/create directory where the file will be saved
-        if not os.path.exists("./SteamUL Downloads/Archives"):
-            os.makedirs("./SteamUL Downloads/Archives")
+        if not os.path.exists("./SteamUL Downloads"):
+            os.makedirs("./SteamUL Downloads")
 
         # Remove special characters from filename
         name = query.results[choice]['name']
         name = f"{name.replace(':', '-').replace('?', '-')}.zip"
 
-        file_path = os.path.join("./SteamUL Downloads/Archives", name)
+        file_path = os.path.join("./SteamUL Downloads", name)
 
         # Save the file
         save_file(ddl, file_path)
+
+        # Ask to unzip
+        unzip_dl(query, choice, file_path)
 
         restart()
 
     # If not
     else:
         restart()
+
+
+def unzip_dl(query: SteamUL, choice: int, zip_path: Any) -> None:
+    """Ask the user whether they'd like to unzip the download or not."""
+    # Ask the user to unzip or not
+    print(f"Would you like to unzip the download now?")
+    print("\t[1]\tY\n\t[2]\tN")
+    unzip_now = input("Selection:\t")
+
+    # If they choose to unzip
+    if str(unzip_now) == '1':
+        # Check for/create directory where the zip contents will be saved
+        if not os.path.exists("./SteamUL Games"):
+            os.makedirs("./SteamUL Games")
+
+        # Remove special characters from folder name
+        name = query.results[choice]['name']
+        name = f"{name.replace(':', '-').replace('?', '-')}"
+        folder_path = os.path.join("./SteamUL Games", name)
+
+        # Unzip the contents
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            for member in tqdm(zip_ref.infolist(), desc='Extracting'):
+                try:
+                    zip_ref.extract(member, folder_path)
+                except zipfile.error:
+                    pass
+
+        # Ask whether the zip archive should be deleted or not
+        print(f"Would you like to delete the archive (.zip)?")
+        print("\t[1]\tY\n\t[2]\tN")
+        delete_now = input("Selection:\t")
+        if str(delete_now) == '1':
+            os.remove(zip_path)
+            print('Deleted the archive')
+
+    elif str(unzip_now) == '2':
+        pass
 
 
 def restart() -> None:

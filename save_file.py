@@ -1,25 +1,17 @@
-import os
+import urllib.request
 from typing import Any
-from progress.spinner import Spinner
 
-import requests
+from tqdm import tqdm
 
 
-def save_file(element: str, file_path: Any) -> None:
-    r = requests.get(element, stream=True)
-    flag = True
-    if r.ok:
-        spinner = Spinner('Downloading ', check_tty=False, hide_cursor=False)
-        while flag:
-            with open(file_path, 'wb') as f:
-                for chunk in r.iter_content(chunk_size=1024 * 8):
-                    if chunk:
-                        f.write(chunk)
-                        f.flush()
-                        os.fsync(f.fileno())
-                    spinner.next()
-                spinner.finish()
-            flag = False
-        print('Download complete')
-    else:  # HTTP status code 4XX/5XX
-        print("Download failed: status code {}\n{}".format(r.status_code, r.text))
+class DownloadProgressBar(tqdm):
+    def update_to(self, b=1, bsize=1, tsize=None):
+        if tsize is not None:
+            self.total = tsize
+        self.update(b * bsize - self.n)
+
+
+def save_file(url: str, file_path: Any):
+    with DownloadProgressBar(unit='B', unit_scale=True,
+                             miniters=1, desc='Downloading') as t:
+        urllib.request.urlretrieve(url, filename=file_path, reporthook=t.update_to)
