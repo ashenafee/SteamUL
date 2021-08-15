@@ -21,7 +21,7 @@ As of now, the goal with SteamUL is to add a GUI for easier/friendlier use. In a
 
 - [ ] Returning Steam links
 - [ ] Returning Steam ratings
-- [ ] Unzipping downloads within SteamUL
+- [x] Unzipping downloads within SteamUL
 
 ## Issues
 If you run into issues using SteamUL, please report them in a detailed manner under the `Issues` tab on this repository.
