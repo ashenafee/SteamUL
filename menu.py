@@ -2,7 +2,6 @@ import os
 import zipfile
 from typing import Any
 
-from progress.spinner import Spinner
 from tqdm import tqdm
 
 from save_file import save_file
@@ -20,7 +19,7 @@ def menu() -> None:
             \____/  \__| \___| \__,_||_| |_| |_| \___/ \_____/            
             """
     print(title)
-    print("SteamUL v1.1 by Buu (Discord: Kid I3uu#9827)")
+    print("SteamUL v1.2 by Buu (Discord: Kid I3uu#9827)")
     print("Python CLI to grab DDL for games off steamunlocked.net")
     print()
 
@@ -34,37 +33,86 @@ def menu() -> None:
 
 def show_results(query: SteamUL) -> None:
     """Present the search results of the user-inputted SteamUL query."""
-    # Print names of the found games
-    print("\nSearch results...")
-    i = 1
-    for item in query.results:
-        print(f"[{i}] {query.results[item]['name']}")
-        i += 1
-    print('-' * 80)
 
-    # Get the user to select their game
-    select_game(query)
+    # If there are results returned from the search, print the results
+    if query.results != {}:
+        print("\nSearch results...")
+        i = 1
+        for item in query.results:
+            print(f"[{i}] {query.results[item]['name']}")
+            i += 1
+        print('-' * 80)
+
+        # Get the user to select their game
+        select_game(query)
+
+    else:
+        print(f"No results have been found for '{query.query}'")
+
+        # Get the user to input another query
+        query = SteamUL(input("Search:\t"))
+        query.search_results()
+        show_results(query)
 
 
 def select_game(query: SteamUL) -> None:
     """Get the user's choice of the game they want to download."""
+
     # Ask user for their game of interest
-    choice = int(input("Selection:\t"))
+    flag = True
+    while flag:
+        try:
+            choice = int(input("Selection:\t"))
+            query.results[choice]
+            flag = False
+        except ValueError:
+            print("Please enter the number beside the title of your choice.")
+        except KeyError:
+            print("Please enter a valid number.")
 
-    # Grab and show download link for the selected number
-    ddl = query.download_link(choice)
-    print("DDL:\t" + ddl)
+    # Grab and show information for the selected number
+    query.steam_info(choice)
 
-    # Ask the user to download or not
-    immediate_dl(query, choice, ddl)
+    # Ask whether they want to download the game
+    print(f"Would you like to proceed to grabbing the download link for '{query.results[choice]['name']}'?")
+    print("\t[1]\tY\n\t[2]\tN")
+
+    flag = True
+    while flag:
+        try:
+            link_now = int(input("Selection:\t"))
+            {1: 'one', 2: 'two'}[link_now]
+            flag = not(link_now == 1 or link_now == 2)
+        except ValueError:
+            print("Please enter the number beside your choice.")
+        except KeyError:
+            print("Please enter a valid number.")
+
+    if str(link_now) == '1':
+        # Grab the download link for the selected number
+        ddl = query.download_link(choice)
+        # Ask the user to download or not
+        immediate_dl(query, choice, ddl)
+    elif str(link_now) == '2':
+        restart()
 
 
 def immediate_dl(query: SteamUL, choice: int, ddl: str) -> None:
     """Ask the user whether they'd like to download the game immediately."""
+
     # Ask user whether the game should be downloaded or not
     print(f"Would you like to download '{query.results[choice]['name']}' now?")
     print("\t[1]\tY\n\t[2]\tN")
-    dl_now = input("Selection:\t")
+    flag = True
+    while flag:
+        try:
+            dl_now = int(input("Selection:\t"))
+            {1: 'one', 2: 'two'}[dl_now]
+            flag = not(dl_now == 1 or dl_now == 2)
+        except ValueError:
+            print("Please enter the number beside your choice.")
+        except KeyError:
+            print("Please enter a valid number.")
 
     # If they choose to download immediately
     if str(dl_now) == '1':
@@ -87,7 +135,7 @@ def immediate_dl(query: SteamUL, choice: int, ddl: str) -> None:
         restart()
 
     # If not
-    else:
+    elif str(dl_now) == '2':
         restart()
 
 
@@ -139,4 +187,4 @@ def restart() -> None:
 
 
 if __name__ == '__main__':
-    menu()
+    pass

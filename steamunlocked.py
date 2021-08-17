@@ -112,20 +112,32 @@ class SteamUL:
 
         return selected['download']
 
+    def steam_info(self, choice) -> None:
+        """Return the info on Steam's store for the selected game."""
+        # Get Steam page for <game>
+        s = requests.Session()
+        response = s.get(f"https://store.steampowered.com/search/?term={self.results[choice]['name']}")
+        soup = BeautifulSoup(response.content, "html.parser")
+        page = soup.find('div', id='search_resultsRows').find('a').get('href')
+
+        # Get info from <page>
+        response = s.get(page)
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        header_img = soup.find('img', class_='game_header_image_full').get('src')
+        description = soup.find('div', class_='game_description_snippet').text.strip()
+        all_reviews = soup.find_all('span', class_='nonresponsive_hidden responsive_reviewdesc')[1].text.strip()[2:]
+        release = soup.find('div', class_='date').text.strip()
+        developer = soup.find('div', id='developers_list').text.strip()
+        publisher = soup.find_all('div', class_='dev_row')[1].find('div', class_='summary column').text.strip()
+        # print(header_img)
+        print("Steam link:\t\t" + response.url)
+        print("Description:\t" + description)
+        print("All reviews:\t" + all_reviews)
+        print("Release date:\t" + release)
+        print("Developer(s):\t\t" + developer)
+        print("Publisher(s):\t\t" + publisher)
+
 
 if __name__ == '__main__':
-    print(f"SteamUL Object\n{'-' * 80}")
-
-    # SteamUnlocked object for user-inputted query
-    query = SteamUL(input("Game:\t"))
-    query.search_results()
-
-    # Print names
-    i = 1
-    for item in query.results:
-        print(f"[{i}] {query.results[item]['name']}")
-        i += 1
-    print('-' * 80)
-
-    # Grab download link for the selected number
-    print(query.download_link(int(input("Selection:\t"))))
+    pass
