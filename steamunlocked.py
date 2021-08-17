@@ -124,13 +124,12 @@ class SteamUL:
         response = s.get(page)
         soup = BeautifulSoup(response.content, "html.parser")
 
-        header_img = soup.find('img', class_='game_header_image_full').get('src')
+        # header_img = soup.find('img', class_='game_header_image_full').get('src')
         description = soup.find('div', class_='game_description_snippet').text.strip()
         all_reviews = soup.find_all('span', class_='nonresponsive_hidden responsive_reviewdesc')[1].text.strip()[2:]
         release = soup.find('div', class_='date').text.strip()
         developer = soup.find('div', id='developers_list').text.strip()
         publisher = soup.find_all('div', class_='dev_row')[1].find('div', class_='summary column').text.strip()
-        # print(header_img)
         print("Steam link:\t" + response.url)
         print("Description:\t" + description)
         print("All reviews:\t" + all_reviews)
