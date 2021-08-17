@@ -16,12 +16,13 @@ SteamUL can be used to:
 - Grab the direct download link (DDL) of the chosen game
 - Download the chosen game
 - Unzip the downloaded game
+- Grab and display information of the game off Steam
 
 ## Roadmap
 As of now, the goal with SteamUL is to add a GUI for easier/friendlier use. In addition to a GUI, upcoming features/fixes include:
 
-- [ ] Returning Steam links
-- [ ] Returning Steam ratings
+- [x] Returning Steam links
+- [x] Returning Steam ratings
 - [x] Unzipping downloads within SteamUL
 
 ## Issues
