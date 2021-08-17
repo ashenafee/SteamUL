@@ -15,13 +15,14 @@ SteamUL can be used to:
 - Search games on steamunlocked (dot) net
 - Grab the direct download link (DDL) of the chosen game
 - Download the chosen game
+- Unzip the downloaded game
 
 ## Roadmap
 As of now, the goal with SteamUL is to add a GUI for easier/friendlier use. In addition to a GUI, upcoming features/fixes include:
 
 - [ ] Returning Steam links
 - [ ] Returning Steam ratings
-- [ ] Unzipping downloads within SteamUL
+- [x] Unzipping downloads within SteamUL
 
 ## Issues
 If you run into issues using SteamUL, please report them in a detailed manner under the `Issues` tab on this repository.
