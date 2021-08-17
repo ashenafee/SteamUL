@@ -131,12 +131,12 @@ class SteamUL:
         developer = soup.find('div', id='developers_list').text.strip()
         publisher = soup.find_all('div', class_='dev_row')[1].find('div', class_='summary column').text.strip()
         # print(header_img)
-        print("Steam link:\t\t" + response.url)
+        print("Steam link:\t" + response.url)
         print("Description:\t" + description)
         print("All reviews:\t" + all_reviews)
         print("Release date:\t" + release)
-        print("Developer(s):\t\t" + developer)
-        print("Publisher(s):\t\t" + publisher)
+        print("Developer(s):\t" + developer)
+        print("Publisher(s):\t" + publisher)
 
 
 if __name__ == '__main__':
