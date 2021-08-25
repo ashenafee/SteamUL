@@ -18,6 +18,12 @@ SteamUL can be used to:
 - Unzip the downloaded game
 - Grab and display information of the game off Steam
 
+## Screenshots
+
+![search](https://user-images.githubusercontent.com/20289287/130716564-ea3ff2ad-9bff-4416-a7ee-958ad07fa0ea.png)
+
+![game-info](https://user-images.githubusercontent.com/20289287/130716570-e88a1446-274c-428c-ac0a-ec968c04e5f9.png)
+
 ## Roadmap
 - [ ] Add progress bar to GUI when: waiting, downloading, and unzipping
 - [ ] Make assets to use for different buttons
